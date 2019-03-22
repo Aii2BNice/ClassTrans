@@ -13,9 +13,9 @@ public class ClasTrans {
 		
 		List<String> fileContent = getFileContent();
 		Class<?> anyClass = Class.forName("dyq.MAddressList");
-		formToDto(anyClass, fileContent);
+		//formToDto(anyClass, fileContent);
 		//dtoToForm(anyClass, fileContent);
-		//dtoToEntity(anyClass, fileContent);
+		dtoToEntity(anyClass, fileContent);
 		//entityToDto(anyClass, fileContent);
 		
 	}
@@ -30,7 +30,9 @@ public class ClasTrans {
 		for(int i=0 ; i < methods.length ; i+=2) {
 			if(!"wait".equals(methods[i].getName())) {
 				System.out.println("//  " + fileContent.get(i/2));
-				System.out.println("dto." + methods[i+1].getName() + "(form." + methods[i].getName() + "());");
+				System.out.println("if(form."+ methods[i].getName() + "()) != null{");
+				System.out.println("  dto." + methods[i+1].getName() + "(form." + methods[i].getName() + "());");
+				System.out.println("}");
 			}else {
 				break;
 			}
@@ -81,7 +83,9 @@ public class ClasTrans {
 		for(int i=0 ; i < methods.length ; i+=2) {
 			if(!"wait".equals(methods[i].getName())) {
 				System.out.println("//  " + fileContent.get(i/2));
-				System.out.println("entity." + methods[i+1].getName() + "(dto." + methods[i].getName() + "());");
+				System.out.println("if(dto."+ methods[i].getName() + "()) != null{");
+				System.out.println("  entity." + methods[i+1].getName() + "(dto." + methods[i].getName() + "());");
+				System.out.println("}");
 			}else {
 				break;
 			}
@@ -102,3 +106,4 @@ public class ClasTrans {
 	}
 	
 }
+
