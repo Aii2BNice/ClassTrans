@@ -1,0 +1,104 @@
+package classtrans;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ClasTrans {
+
+	public static void main(String[] args) throws Exception {
+		
+		List<String> fileContent = getFileContent();
+		Class<?> anyClass = Class.forName("dyq.MAddressList");
+		formToDto(anyClass, fileContent);
+		//dtoToForm(anyClass, fileContent);
+		//dtoToEntity(anyClass, fileContent);
+		//entityToDto(anyClass, fileContent);
+		
+	}
+	
+	/**
+	 * Form -> Dto
+	 * @param anyClass
+	 * @param fileContent
+	 */
+	protected static void formToDto(Class<?> anyClass,List<String> fileContent) {
+		Method[] methods = anyClass.getMethods();
+		for(int i=0 ; i < methods.length ; i+=2) {
+			if(!"wait".equals(methods[i].getName())) {
+				System.out.println("//  " + fileContent.get(i/2));
+				System.out.println("dto." + methods[i+1].getName() + "(form." + methods[i].getName() + "());");
+			}else {
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * dto -> form
+	 * @param anyClass
+	 * @param fileContent
+	 */
+	protected static void dtoToForm(Class<?> anyClass,List<String> fileContent) {
+		Method[] methods = anyClass.getMethods();
+		for(int i=0 ; i < methods.length ; i+=2) {
+			if(!"wait".equals(methods[i].getName())) {
+				System.out.println("//  " + fileContent.get(i/2));
+				System.out.println("form." + methods[i+1].getName() + "(dto." + methods[i].getName() + "());");
+			}else {
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * entity -> dto
+	 * @param anyClass
+	 * @param fileContent
+	 */
+	protected static void entityToDto(Class<?> anyClass,List<String> fileContent) {
+		Method[] methods = anyClass.getMethods();
+		for(int i=0 ; i < methods.length ; i+=2) {
+			if(!"wait".equals(methods[i].getName())) {
+				System.out.println("//  " + fileContent.get(i/2));
+				System.out.println("dto." + methods[i+1].getName() + "(entity." + methods[i].getName() + "());");
+			}else {
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * dto -> entity
+	 * @param anyClass
+	 * @param fileContent
+	 */
+	protected static void dtoToEntity(Class<?> anyClass,List<String> fileContent) {
+		Method[] methods = anyClass.getMethods();
+		for(int i=0 ; i < methods.length ; i+=2) {
+			if(!"wait".equals(methods[i].getName())) {
+				System.out.println("//  " + fileContent.get(i/2));
+				System.out.println("entity." + methods[i+1].getName() + "(dto." + methods[i].getName() + "());");
+			}else {
+				break;
+			}
+		}
+	}
+	
+	private static List<String> getFileContent() throws Exception{
+		List<String> fileContentList = new ArrayList<String>();
+		File file = new File("C:\\dyq.txt");
+		BufferedReader reader = null;
+		String temp = null;
+			reader = new BufferedReader(new FileReader(file));
+			while((temp = reader.readLine()) != null){
+				fileContentList.add(temp);
+			}
+			reader.close();
+		return fileContentList;
+	}
+	
+}
