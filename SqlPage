@@ -1,0 +1,46 @@
+package com.dyq.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class SqlPageTest {
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws Exception {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://rm-2ze9fgqz3io9i2pjoo.mysql.rds.aliyuncs.com:3306/54hr_1?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8","root_yiait","jay0jay0@163");
+		Statement createStatement = conn.createStatement();
+		String countSql = "select count(*) as count from t_business_company";
+		ResultSet resultCnt = createStatement.executeQuery(countSql);
+		int count = 0;
+		while (resultCnt.next()) {
+			count = resultCnt.getInt("count");
+		}
+
+		System.out.println("请输入第几页:");
+		int input = new Scanner(System.in).nextInt() - 1;
+		int offset = (input) * 10;
+		if (input < 0) {
+			offset = 0;
+		}
+		if (input > count/10) {
+			offset = 0;
+		}
+		System.out.println("总数:" + count);
+		String limit = "10";
+		String sql = "select * from t_business_company LIMIT " + limit + " OFFSET " + (offset);
+		ResultSet result = createStatement.executeQuery(sql);
+		if (offset/10 < count/10) {
+			System.out.println(">>>>>>>>>第" + (offset/10+1) + "页<<<<<<<<<");
+		}
+		while(result.next()){
+			String businessId = result.getString("t_business_company_id");
+			String businessName = result.getString("t_business_company_name");
+			System.out.println(businessId + " : " + businessName);
+		}
+	}
+
+}
